@@ -145,7 +145,7 @@ Le dossier `screenshots/` est présent pour recevoir les captures réelles:
 - `screenshots/home.png`
 - `screenshots/detail.png`
 - `screenshots/profile.png`
-- `screenshots/offline.png`
+- `screenshots/offline.jpeg`
 
 Aucune capture fictive n’est présentée comme générée.
 
