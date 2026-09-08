@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/constants/app_constants.dart';
+import 'core/localization/app_localizations.dart';
 import 'core/network/dio_client.dart';
 import 'core/storage/local_storage.dart';
 import 'core/storage/token_storage.dart';
@@ -20,11 +21,22 @@ Future<void> main() async {
   final box = await Hive.openBox<dynamic>(AppConstants.productsBox);
   final tokenStorage = SecureTokenStorage();
   final client = DioClient(tokenStorage);
-  final productRepository = ProductRepositoryImpl(ProductRemoteDataSource(client), ProductLocalDataSource(LocalStorage(box)));
-  final authRepository = AuthRepositoryImpl(AuthRemoteDataSource(client), tokenStorage);
+  final productRepository = ProductRepositoryImpl(
+    ProductRemoteDataSource(client),
+    ProductLocalDataSource(LocalStorage(box)),
+  );
+  final authRepository = AuthRepositoryImpl(
+    AuthRemoteDataSource(client),
+    tokenStorage,
+  );
   final controller = AppController(authRepository, productRepository);
   final router = createAppRouter(controller);
-  runApp(AppScope(notifier: controller, child: BackendApp(router: router)));
+  runApp(
+    AppScope(
+      notifier: controller,
+      child: BackendApp(router: router),
+    ),
+  );
   controller.restoreSession();
 }
 
@@ -34,8 +46,27 @@ class BackendApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lightScheme = ColorScheme.fromSeed(seedColor: const Color(0xFF286A6C));
-    final darkScheme = ColorScheme.fromSeed(seedColor: const Color(0xFF83D8D4), brightness: Brightness.dark);
-    return MaterialApp.router(title: 'Flutter Backend App', debugShowCheckedModeBanner: false, theme: ThemeData(colorScheme: lightScheme, useMaterial3: true, scaffoldBackgroundColor: const Color(0xFFF5F8F7), cardTheme: const CardThemeData(margin: EdgeInsets.zero)), darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true), themeMode: ThemeMode.system, routerConfig: router);
+    final lightScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF286A6C),
+    );
+    final darkScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF83D8D4),
+      brightness: Brightness.dark,
+    );
+    return MaterialApp.router(
+      title: 'Flutter Backend App',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [AppLocalizations.delegate],
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(
+        colorScheme: lightScheme,
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF5F8F7),
+        cardTheme: const CardThemeData(margin: EdgeInsets.zero),
+      ),
+      darkTheme: ThemeData(colorScheme: darkScheme, useMaterial3: true),
+      themeMode: ThemeMode.system,
+      routerConfig: router,
+    );
   }
 }

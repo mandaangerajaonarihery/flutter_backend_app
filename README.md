@@ -155,6 +155,54 @@ Aucune clé API ou credential n’est requis par DummyJSON. Les tokens utilisate
 sont stockés uniquement dans `flutter_secure_storage`. Ne committez jamais de
 JWT, mot de passe ou secret.
 
+## Internationalisation
+
+L'application utilise le système officiel Flutter avec `flutter_localizations`.
+Les locales `fr` et `en` sont supportées, avec sélection par la locale du système.
+Les libellés des écrans Explorer, Connexion, Profil et navigation sont localisés.
+
+## Tests et couverture
+
+La suite comprend 13 tests unitaires et 6 tests de widgets. Deux scénarios
+d'intégration reproductibles sont dans `integration_test/app_flows_test.dart`.
+
+```bash
+flutter analyze
+flutter test
+flutter test --coverage
+flutter test integration_test/app_flows_test.dart
+```
+
+La dernière commande d'intégration cible un appareil ou un émulateur Flutter.
+`coverage/` est généré par `flutter test --coverage` et reste ignoré par Git.
+
+## Performance et accessibilité
+
+- Les catalogues utilisent `GridView.builder` pour un rendu lazy.
+- Les écrans et widgets statiques utilisent `const` lorsque possible.
+- Les images distantes ont un fallback d'erreur et ne sont chargées que par les
+	éléments visibles de la grille.
+- Les champs, actions et cartes produits exposent des informations sémantiques.
+- Les états loading, vide, erreur, retry et hors ligne sont explicitement rendus.
+
+## CI/CD
+
+Le workflow [`.github/workflows/flutter.yml`](.github/workflows/flutter.yml)
+installe Flutter 3.32.6, exécute `flutter pub get`, `flutter analyze` et
+`flutter test --coverage`, puis publie `coverage/lcov.info` comme artefact.
+
+![CI](https://github.com/mandaangerajaonarihery/flutter_backend_app/actions/workflows/flutter.yml/badge.svg)
+
+## Screenshots
+
+Les captures réelles disponibles sont référencées ci-dessous :
+
+![Login](screenshots/login.png)
+![Home](screenshots/home.png)
+![Detail](screenshots/detail.png)
+![Profile](screenshots/profile.png)
+![Offline](screenshots/offline.jpeg)
+
 ## GitHub
 
 Le projet est prêt à être initialisé ou publié dans un dépôt nommé

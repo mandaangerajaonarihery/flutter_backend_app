@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({super.key, required this.controller, required this.label, this.obscureText = false, this.keyboardType});
+  const AppTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.obscureText = false,
+    this.keyboardType,
+  });
 
   final TextEditingController controller;
   final String label;
@@ -10,12 +16,23 @@ class AppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(labelText: label, prefixIcon: Icon(obscureText ? Icons.lock_outline : Icons.person_outline)),
-      validator: (value) => value == null || value.trim().isEmpty ? 'Ce champ est obligatoire' : null,
+    return Semantics(
+      textField: true,
+      label: label,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(
+            obscureText ? Icons.lock_outline : Icons.person_outline,
+          ),
+        ),
+        validator: (value) => value == null || value.trim().isEmpty
+            ? 'Ce champ est obligatoire'
+            : null,
+      ),
     );
   }
 }
